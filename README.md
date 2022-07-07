@@ -14,31 +14,17 @@ GithHub repo where it is hosted.
 
 ``` r
 install.packages("devtools")
-#> Installing package into '/private/var/folders/j2/b7c7t8j976z3zxy0tgc4b9jw0000gn/T/RtmpEZpRrw/temp_libpath8703352e68c9'
+#> Installing package into '/private/var/folders/j2/b7c7t8j976z3zxy0tgc4b9jw0000gn/T/RtmpQWUF9k/temp_libpath8aeb1b2acce'
 #> (as 'lib' is unspecified)
 #> 
 #> The downloaded binary packages are in
-#>  /var/folders/j2/b7c7t8j976z3zxy0tgc4b9jw0000gn/T//RtmpgOnS1s/downloaded_packages
-require(devtools)
-#> Loading required package: devtools
-#> Loading required package: usethis
-#install_github("TaishiNakase/MVSE")
-```
-
-## Example
-
-Let’s go through a short example of how one might use MVSE to estimate
-Index P for some mosquito-borne virus.
-
-First, we will install some packages.
-
-``` r
+#>  /var/folders/j2/b7c7t8j976z3zxy0tgc4b9jw0000gn/T//RtmpXdmB6H/downloaded_packages
 install.packages("tidyverse")
-#> Installing package into '/private/var/folders/j2/b7c7t8j976z3zxy0tgc4b9jw0000gn/T/RtmpEZpRrw/temp_libpath8703352e68c9'
+#> Installing package into '/private/var/folders/j2/b7c7t8j976z3zxy0tgc4b9jw0000gn/T/RtmpQWUF9k/temp_libpath8aeb1b2acce'
 #> (as 'lib' is unspecified)
 #> 
 #> The downloaded binary packages are in
-#>  /var/folders/j2/b7c7t8j976z3zxy0tgc4b9jw0000gn/T//RtmpgOnS1s/downloaded_packages
+#>  /var/folders/j2/b7c7t8j976z3zxy0tgc4b9jw0000gn/T//RtmpXdmB6H/downloaded_packages
 require(tidyverse)
 #> Loading required package: tidyverse
 #> ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──
@@ -49,8 +35,66 @@ require(tidyverse)
 #> ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
 #> x dplyr::filter() masks stats::filter()
 #> x dplyr::lag()    masks stats::lag()
-require(MVSE)
-#> Loading required package: MVSE
+require(devtools)
+#> Loading required package: devtools
+#> Loading required package: usethis
+install_github("TaishiNakase/MVSE")
+#> Downloading GitHub repo TaishiNakase/MVSE@HEAD
+#> rlang        (0.4.12 -> 1.0.3  ) [CRAN]
+#> magrittr     (2.0.1  -> 2.0.3  ) [CRAN]
+#> vctrs        (0.3.8  -> 0.4.1  ) [CRAN]
+#> glue         (1.6.0  -> 1.6.2  ) [CRAN]
+#> fansi        (1.0.2  -> 1.0.3  ) [CRAN]
+#> crayon       (1.4.2  -> 1.5.1  ) [CRAN]
+#> cli          (3.1.1  -> 3.3.0  ) [CRAN]
+#> Rcpp         (1.0.8  -> 1.0.8.3) [CRAN]
+#> plyr         (1.8.6  -> 1.8.7  ) [CRAN]
+#> colorspace   (2.0-2  -> 2.0-3  ) [CRAN]
+#> RColorBrewer (1.1-2  -> 1.1-3  ) [CRAN]
+#> withr        (2.4.3  -> 2.5.0  ) [CRAN]
+#> farver       (2.1.0  -> 2.1.1  ) [CRAN]
+#> scales       (1.1.1  -> 1.2.0  ) [CRAN]
+#> generics     (0.1.1  -> 0.1.3  ) [CRAN]
+#> matrixStats  (0.61.0 -> 0.62.0 ) [CRAN]
+#> pillar       (1.6.4  -> 1.7.0  ) [CRAN]
+#> tibble       (3.1.6  -> 3.1.7  ) [CRAN]
+#> checkmate    (2.0.0  -> 2.1.0  ) [CRAN]
+#> tidyselect   (1.1.1  -> 1.1.2  ) [CRAN]
+#> dplyr        (1.0.7  -> 1.0.9  ) [CRAN]
+#> tidyr        (1.1.4  -> 1.2.0  ) [CRAN]
+#> bayesplot    (1.8.1  -> 1.9.0  ) [CRAN]
+#> Installing 23 packages: rlang, magrittr, vctrs, glue, fansi, crayon, cli, Rcpp, plyr, colorspace, RColorBrewer, withr, farver, scales, generics, matrixStats, pillar, tibble, checkmate, tidyselect, dplyr, tidyr, bayesplot
+#> Installing packages into '/private/var/folders/j2/b7c7t8j976z3zxy0tgc4b9jw0000gn/T/RtmpQWUF9k/temp_libpath8aeb1b2acce'
+#> (as 'lib' is unspecified)
+#> 
+#>   There is a binary version available but the source version is later:
+#>        binary source needs_compilation
+#> farver  2.1.0  2.1.1              TRUE
+#> 
+#> 
+#> The downloaded binary packages are in
+#>  /var/folders/j2/b7c7t8j976z3zxy0tgc4b9jw0000gn/T//RtmpXdmB6H/downloaded_packages
+#> installing the source package 'farver'
+#> * checking for file ‘/private/var/folders/j2/b7c7t8j976z3zxy0tgc4b9jw0000gn/T/RtmpXdmB6H/remotes8fbb5b77b602/TaishiNakase-MVSE-dee2928/DESCRIPTION’ ... OK
+#> * preparing ‘MVSE’:
+#> * checking DESCRIPTION meta-information ... OK
+#> * cleaning src
+#> * checking for LF line-endings in source and make files and shell scripts
+#> * checking for empty or unneeded directories
+#> * building ‘MVSE_1.0.tar.gz’
+#> Installing package into '/private/var/folders/j2/b7c7t8j976z3zxy0tgc4b9jw0000gn/T/RtmpQWUF9k/temp_libpath8aeb1b2acce'
+#> (as 'lib' is unspecified)
+```
+
+## Example
+
+Let’s go through a short example of how one might use MVSE to estimate
+Index P for some mosquito-borne virus.
+
+First, we will install some packages.
+
+``` r
+library(MVSE)
 #> 
 #> Attaching package: 'MVSE'
 #> The following object is masked from 'package:tidyr':
