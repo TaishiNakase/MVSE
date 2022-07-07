@@ -14,11 +14,11 @@ GithHub repo where it is hosted.
 
 ``` r
 install.packages("devtools")
-#> Installing package into '/private/var/folders/j2/b7c7t8j976z3zxy0tgc4b9jw0000gn/T/RtmpxPGhCv/temp_libpath85e856174ea6'
+#> Installing package into '/private/var/folders/j2/b7c7t8j976z3zxy0tgc4b9jw0000gn/T/RtmpEZpRrw/temp_libpath8703352e68c9'
 #> (as 'lib' is unspecified)
 #> 
 #> The downloaded binary packages are in
-#>  /var/folders/j2/b7c7t8j976z3zxy0tgc4b9jw0000gn/T//RtmpI4Rrr1/downloaded_packages
+#>  /var/folders/j2/b7c7t8j976z3zxy0tgc4b9jw0000gn/T//RtmpgOnS1s/downloaded_packages
 require(devtools)
 #> Loading required package: devtools
 #> Loading required package: usethis
@@ -28,17 +28,17 @@ require(devtools)
 ## Example
 
 Let’s go through a short example of how one might use MVSE to estimate
-Index P some mosquito-borne virus.
+Index P for some mosquito-borne virus.
 
 First, we will install some packages.
 
 ``` r
 install.packages("tidyverse")
-#> Installing package into '/private/var/folders/j2/b7c7t8j976z3zxy0tgc4b9jw0000gn/T/RtmpxPGhCv/temp_libpath85e856174ea6'
+#> Installing package into '/private/var/folders/j2/b7c7t8j976z3zxy0tgc4b9jw0000gn/T/RtmpEZpRrw/temp_libpath8703352e68c9'
 #> (as 'lib' is unspecified)
 #> 
 #> The downloaded binary packages are in
-#>  /var/folders/j2/b7c7t8j976z3zxy0tgc4b9jw0000gn/T//RtmpI4Rrr1/downloaded_packages
+#>  /var/folders/j2/b7c7t8j976z3zxy0tgc4b9jw0000gn/T//RtmpgOnS1s/downloaded_packages
 require(tidyverse)
 #> Loading required package: tidyverse
 #> ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──
@@ -58,7 +58,7 @@ require(MVSE)
 #>     extract
 ```
 
-We need to first create a `mvse_model` object, which requires time
+We first need to create a `mvse_model` object, which requires time
 series data for climatic variables (i.e. temperature, humidity and
 rainfall) as well as epi-entomological prior distributions for the
 virus/vector/host system of interest.
