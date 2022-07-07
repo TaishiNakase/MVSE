@@ -20,7 +20,7 @@ MVSE, Mosquito-borne Viral Suitability Estimator, provides methods for the estim
 
 The MVSE package is currently not hosted on CRAN (Comprehensive R Archive Network). We thus need to install the package directly from the GithHub repo where it is hosted. 
 
-```{r}
+```{r echo=FALSE}
 install.packages("devtools")
 install.packages("tidyverse")
 require(tidyverse)
@@ -34,7 +34,7 @@ Let's go through a short example of how one might use MVSE to estimate Index P f
 
 First, we will install some packages. 
 
-```{r}
+```{r echo=FALSE}
 library(MVSE)
 ```
 
