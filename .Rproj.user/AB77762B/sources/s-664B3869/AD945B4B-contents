@@ -1,0 +1,57 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+library(knitr)
+```
+
+# MVSE
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+MVSE, Mosquito-borne Viral Suitability Estimator, provides methods for the estimation of an index of climate-based transmission potential for mosquito-borne viruses. It can be parametrized for any combination of host, virus and mosquito-species of interest with local climate data. 
+
+## Installation
+
+The MVSE package is currently not hosted on CRAN (Comprehensive R Archive Network). We thus need to install the package directly from the GithHub repo where it is hosted. 
+
+```{r}
+install.packages("devtools")
+require(devtools)
+install_github()
+```
+
+## Example
+
+This is a basic example which shows you how to solve a common problem:
+
+```{r example}
+library(MVSE)
+## basic example code
+```
+
+What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
+
+```{r cars}
+summary(cars)
+```
+
+You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this. You could also use GitHub Actions to re-render `README.Rmd` every time you push. An example workflow can be found here: <https://github.com/r-lib/actions/tree/v1/examples>.
+
+You can also embed plots, for example:
+
+```{r pressure, echo = FALSE}
+plot(pressure)
+```
+
+In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.

@@ -1,0 +1,31 @@
+Package: MVSE
+Type: Package
+Title: (M)osquito-borne (V)iral (S)uitability (E)stimator
+Version: 1.0
+Date: 2022-05-25
+Author: Taishi Nakase
+Maintainer: Taishi Nakase <tnakase@stanford.edu>
+Description: The MVSE package provides computational methods to estimate an index of 'transmission potential' for mosquito-borne viruses. MVSE allows for parameterization of particular viruses, host and mosquito-species. The methods offered are climate-driven and can therefore be location specific.
+License: GPL (>= 2)
+Imports: 
+    Rcpp (>= 1.0.8),
+    bayesplot,
+    coda,
+    dplyr,
+    pbapply,
+    RColorBrewer,
+    tidyr
+Depends: 
+    R (>= 2.10),
+    ggplot2
+LinkingTo: Rcpp
+RoxygenNote: 7.2.0
+Collate: 
+    'utils.R'
+    'mvsemodel.R'
+    'mvsefit.R'
+    'MVSE-package.R'
+    'RcppExports.R'
+    'data.R'
+Encoding: UTF-8
+LazyData: true
