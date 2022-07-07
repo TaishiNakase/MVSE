@@ -18,7 +18,11 @@ default, all parameters are included.}
 \value{
 If only one parameter is specified, a single ggplot object is returned. Otherwise, many ggplot
 objects organized into a grid via \code{\link{bayesplot_grid}} is returned.
-
+}
+\description{
+The default plot shows the probability density function for all parameters.
+}
+\examples{
 #define a mvse model
 data(climateFSA)
 priors <- list()
@@ -33,9 +37,7 @@ user_model <- mvse_model(model_name="my_mvse_model", climate_data=climateFSA, pr
 # plot prior distributions of epi-entomological parameters
 plot_priors(object=user_model)
 plot_priors(object=user_model, pars=c("mosq_life_exp", "mosq_inc_per", "human_inf_per"))
-}
-\description{
-The default plot shows the probability density function for all parameters.
+
 }
 \seealso{
 \code{\linkS4class{mvsemodel}}

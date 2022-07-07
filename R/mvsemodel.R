@@ -374,7 +374,6 @@ setMethod(f="fitting",
 #' @return A ggplot object that can be further customized using the \bold{ggplot2} package.
 #' 
 #' @examples
-#' 
 #' #define a mvse model
 #' data(climateFSA)
 #' user_model <- mvse_model(model_name="my_mvse_model", climate_data=climateFSA, priors=list())
@@ -510,6 +509,7 @@ setMethod(f="plot_climate",
 #' @return If only one parameter is specified, a single ggplot object is returned. Otherwise, many ggplot
 #' objects organized into a grid via \code{\link{bayesplot_grid}} is returned.
 #'
+#' @examples
 #' #define a mvse model
 #' data(climateFSA)
 #' priors <- list()

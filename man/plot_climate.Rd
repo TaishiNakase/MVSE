@@ -31,7 +31,6 @@ The default plot shows the time series for temperature and humidity. The method 
 plot other combinations of climatic variables (i.e. temperature, humidity and rainfall).
 }
 \examples{
-
 #define a mvse model
 data(climateFSA)
 user_model <- mvse_model(model_name="my_mvse_model", climate_data=climateFSA, priors=list())

@@ -2,8 +2,6 @@
 output: github_document
 ---
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -16,9 +14,6 @@ library(knitr)
 
 # MVSE
 
-<!-- badges: start -->
-<!-- badges: end -->
-
 MVSE, Mosquito-borne Viral Suitability Estimator, provides methods for the estimation of an index of climate-based transmission potential for mosquito-borne viruses. It can be parametrized for any combination of host, virus and mosquito-species of interest with local climate data. 
 
 ## Installation
@@ -28,30 +23,52 @@ The MVSE package is currently not hosted on CRAN (Comprehensive R Archive Networ
 ```{r}
 install.packages("devtools")
 require(devtools)
-install_github()
+#install_github("TaishiNakase/MVSE")
 ```
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+Let's go through a short example of how one might use MVSE to estimate Index P some mosquito-borne virus. 
 
-```{r example}
-library(MVSE)
-## basic example code
+First, we will install some packages. 
+
+```{r}
+install.packages("tidyverse")
+require(tidyverse)
+require(MVSE)
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
+We need to first create a `mvse_model` object, which requires time series data for climatic variables (i.e. temperature, humidity and rainfall) as well as epi-entomological prior distributions for the virus/vector/host system of interest. 
 
-```{r cars}
-summary(cars)
+```{r}
+# climate data
+data("climateFSA")
+
+# user-defined model
+priors <- list(mosq_life_exp=list(pars=c(mean=12, sd=2), dist="normal"),
+               mosq_inc_per=list(pars=c(mean=7, sd=2), dist="normal"),
+               mosq_biting_freq=list(pars=c(mean=0.25, sd=0.01), dist="normal"),
+               human_life_exp=list(pars=c(mean=71.1, sd=2), dist="normal"),
+               human_inc_per=list(pars=c(mean=5.8, sd=1), dist="normal"),
+               human_inf_per=list(pars=c(mean=5.9, sd=1), dist="normal"))
+example_mvse_model <- mvse_model(model_name="user_test", climate_data=climateFSA, priors=priors)
 ```
 
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this. You could also use GitHub Actions to re-render `README.Rmd` every time you push. An example workflow can be found here: <https://github.com/r-lib/actions/tree/v1/examples>.
+Let's take a look at the input data to be used in the sampling procedure. 
 
-You can also embed plots, for example:
-
-```{r pressure, echo = FALSE}
-plot(pressure)
+```{r}
+example_mvse_model
 ```
 
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.
+Next, let's perform the MCMC (Markov chain Monte Carlo) sampling procedure to estimate Index P. 
+
+```{r}
+example_mvse_fit <- fitting(example_mvse_model, verbose=TRUE)
+```
+
+Finally, let's take a look at the estimated distribution of the time series of Index P. 
+
+```{r}
+mcmc_index_dist(example_mvse_fit, index="indexP")
+```
+

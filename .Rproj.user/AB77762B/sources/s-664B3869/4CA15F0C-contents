@@ -177,7 +177,7 @@ setMethod("print", "mvsefit",
 #' 
 #' # extract the sampled parameters
 #' all_output <- extract(user_fit) # all parameters
-#' indexP_output <- extract(user_fit, pars="indexP) # only Index P
+#' indexP_output <- extract(user_fit, pars="indexP") # only Index P
 #' 
 #' @usage NULL
 #' @name extract
