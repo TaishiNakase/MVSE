@@ -63,12 +63,12 @@ example_mvse_model
 Next, let's perform the MCMC (Markov chain Monte Carlo) sampling procedure to estimate Index P. 
 
 ```{r}
-example_mvse_fit <- fitting(example_mvse_model, verbose=TRUE)
+example_mvse_fit <- fitting(example_mvse_model, verbose=FALSE)
 ```
 
 Finally, let's take a look at the estimated distribution of the time series of Index P. 
 
 ```{r}
-mcmc_index_dist(example_mvse_fit, index="indexP")
+indexP_plot <- mcmc_index_dist(example_mvse_fit, index="indexP")
 ```
 
