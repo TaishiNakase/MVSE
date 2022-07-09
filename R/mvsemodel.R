@@ -549,13 +549,14 @@ setMethod(f="plot_priors",
             mosq_biting_freq_pdf <- .getDistPDF(pars=this_priors$mosq_biting_freq$pars, dist=this_priors$mosq_biting_freq$dist)
             human_life_exp_pdf <- .getDistPDF(pars=this_priors$human_life_exp$pars, dist=this_priors$human_life_exp$dist)
             human_inc_per_pdf <- .getDistPDF(pars=this_priors$human_inc_per$pars, dist=this_priors$human_inc_per$dist)
+            human_inf_per_pdf <- .getDistPDF(pars=this_priors$human_inf_per$pars, dist=this_priors$human_inf_per$dist)
             prior_pdf_list <- list(mosq_life_exp=mosq_life_exp_pdf, mosq_inc_per=mosq_inc_per_pdf,
                                    mosq_biting_freq=mosq_biting_freq_pdf, human_life_exp=human_life_exp_pdf,
-                                   human_inc_per= human_inc_per_pdf)
-            all_pars <- c("mosq_life_exp", "mosq_inc_per", "mosq_biting_freq", "human_life_exp", "human_inc_per")
+                                   human_inc_per= human_inc_per_pdf, human_inf_per=human_inf_per_pdf)
+            all_pars <- c("mosq_life_exp", "mosq_inc_per", "mosq_biting_freq", "human_life_exp", "human_inc_per", "human_inf_per")
             labels <- c("Mosquito life expectancy \n (days)", "Mosquito incubation period \n (days)",
                         "Mosquito biting frequency \n (bites/female/day)",
-                        "Human life expectancy \n (years)", "Human incubation period \n (days)")
+                        "Human life expectancy \n (years)", "Human incubation period \n (days)", "Human infectious period \n (days)")
             names(labels) <- all_pars
             pal <- brewer.pal(length(all_pars), "Set3")
             tmp <- pal[5]; pal[5] <- pal[2]; pal[2] <- tmp
@@ -609,8 +610,8 @@ setMethod(f="plot_priors",
                 blue_colors <- colorRampPalette(brewer.pal(8, "Blues"))(length(values_list))
                 p <- ggplot(data=density_df) +
                   theme_bw() +
-                  geom_line(aes(x=value, y=density, color=temp)) +
                   geom_ribbon(aes(x=value, ymax=density, ymin=0, fill=temp), alpha=0.8) +
+                  geom_line(aes(x=value, y=density), color="black") +
                   labs(title=labels[par], fill="Temperature", color="Temperature") +
                   scale_fill_manual(breaks=prior_pdf_list[[par]]$temps,
                                      values=blue_colors) +
@@ -626,8 +627,8 @@ setMethod(f="plot_priors",
                 density_df <- data.frame(x=values, y=density)
                 p <- ggplot(data=density_df) +
                   theme_bw() +
-                  geom_line(aes(x=x, y=y), color=pal[par]) +
                   geom_ribbon(aes(x=x, ymax=y, ymin=0), fill=pal[par], alpha=0.8) +
+                  geom_line(aes(x=x, y=y), color="black") +
                   labs(title=labels[par]) +
                   theme(plot.title=element_text(size=8), axis.title=element_blank())
               }
@@ -717,6 +718,11 @@ setMethod(f="plot_priors",
   indexP <- matrix(rep_vals, ncol=(num_steps))
   Q <- matrix(rep_vals, ncol=(num_steps))
   V0 <- matrix(rep_vals, ncol=(num_steps))
+  muV_samples <- list()
+  aV_samples <- list()
+  phiVH_samples <- list()
+  phiHV_samples <- list()
+  gammaV_samples <- list()
   if (verbose) pb <- txtProgressBar(min=0, max = n-1, style = 3)
   for (ii in 1:n){
     # sample from each of factors' distributions
@@ -748,7 +754,14 @@ setMethod(f="plot_priors",
     gammaV_t[which(gammaV_t<0)]<- 0
     betaHV[which(betaHV<0)]<- 0
     betaVH[which(betaVH<0)]<- 0
-
+    
+    # save sampled biological parameters
+    muV_samples[[ii]] <- muV_t
+    aV_samples[[ii]] <- a_t
+    phiVH_samples[[ii]] <- betaVH
+    phiHV_samples[[ii]] <- betaHV
+    gammaV_samples[[ii]] <- gammaV_t
+    
     # calculate index P
     indexP[ii,]<- (betaVH*betaHV*gammaV_t*gammaH)/(muV_t*(deltaH+muH)*(gammaH+muH)*(gammaV_t+muV_t)) #index P
     indexP[ii, which(indexP[ii,]<0)]<- 0
@@ -767,7 +780,14 @@ setMethod(f="plot_priors",
     if (verbose) setTxtProgressBar(pb, ii)
   }
   if (verbose) close(pb)
-
+  
+  muV_samples <- do.call(cbind, muV_samples)
+  aV_samples <- do.call(cbind, aV_samples)
+  phiVH_samples <- do.call(cbind, phiVH_samples)
+  phiHV_samples <- do.call(cbind, phiHV_samples)
+  gammaV_samples <- do.call(cbind, gammaV_samples)
+  bio_samples <- list(muV=muV_samples, aV=aV_samples, phiVH=phiVH_samples, phiHV=phiHV_samples, gammaV=gammaV_samples)
+  
   reformat <- function(x) {
     x <- t(x)
     colnames(x) <- 1:ncol(x)
@@ -780,6 +800,7 @@ setMethod(f="plot_priors",
   }
   gen_quantities <- lapply(list(indexP, Q, V0), reformat)
   names(gen_quantities) <- c("indexP", "Q", "V0")
+  gen_quantities <- c(gen_quantities, bio_samples)
   return(gen_quantities)
 }
 
