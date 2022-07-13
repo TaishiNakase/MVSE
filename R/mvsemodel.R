@@ -745,9 +745,9 @@ setMethod(f="plot_priors",
                                     rngs=mosq_inc_per_rng)
     a_t <- prior_mosq_biting_freq_mean*(1+mvse_data$A)^rho
     epsilonVH_t<- mvse_data$K
-    betaHV<- a_t*epsilonVH_t
+    betaVH <- a_t*epsilonVH_t
     epsilonHV_t <- mvse_data$I;
-    betaVH <- a_t*epsilonHV_t
+    betaHV<- a_t*epsilonHV_t
 
     # correct negative to zero for bio meaning
     muV_t[which(muV_t<0)]<- 0
@@ -758,8 +758,8 @@ setMethod(f="plot_priors",
     # save sampled biological parameters
     muV_samples[[ii]] <- muV_t
     aV_samples[[ii]] <- a_t
-    phiVH_samples[[ii]] <- betaVH
-    phiHV_samples[[ii]] <- betaHV
+    phiVH_samples[[ii]] <- epsilonVH_t
+    phiHV_samples[[ii]] <- epsilonHV_t
     gammaV_samples[[ii]] <- gammaV_t
     
     # calculate index P
