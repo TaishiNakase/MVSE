@@ -9,7 +9,7 @@
 #' @slot mvsemodel The instance of S4 class \link{mvsemodel}.
 #' @slot mvse_args A list containing the arguments used for sampling (e.g. \code{iter}, \code{warmup}, \code{init}, \code{gauJumps}, etc.).
 #' @slot sim A list containing simulation results including the posterior draws for the factors (rho, eta, alpha) and the generated
-#' quantities (indexP, Q, V0) as well as various pieces of data used by many of the methods for \code{mvsefit} objects.
+#' quantities (i.e. indexP) as well as various pieces of data used by many of the methods for \code{mvsefit} objects.
 #'
 #' @section Methods:
 #' \subsection{Printing, plotting and summarizing:}{
@@ -17,7 +17,7 @@
 #' \subsection{Extracting posterior draws:}{
 #' \describe{\item{\code{show}}{Print the default summary for the model.}}}
 #' \subsection{Simulating:}{
-#' \describe{\item{\code{simulate}}{Simulate Index P, Q and V0 using the fitted model.}}}
+#' \describe{\item{\code{simulate}}{Simulate Index P using the fitted model.}}}
 #'
 #'
 #' @name mvsefit-class
@@ -49,7 +49,7 @@ setClass("mvsefit",
 #' @param mvse_args A list containing the arguments used for sampling
 #' (e.g. \code{iter}, \code{warmup}, \code{init}, \code{gauJumps}, etc.).
 #' @param sim A list containing simulation results including the posterior draws for the factors (rho, eta, alpha) and the generated
-#' quantities (indexP, Q, V0) as well as various pieces of data used by many of the methods for \code{mvsefit} objects.
+#' quantities (i.e. indexP) as well as various pieces of data used by many of the methods for \code{mvsefit} objects.
 #'
 #' @return An instance of S4 class \code{\linkS4class{mvsefit}}.
 #' @noRd
@@ -73,8 +73,8 @@ setMethod("show", "mvsefit",
             cat("## Model category:", object@model_category, "\n")
             cat(paste("## iter=", object@mvse_args$iter, "; warmup=", object@mvse_args$warmup, sep=""), "\n")
             cat(paste("## post-warmup iter=", object@mvse_args$iter*object@mvse_args$warmup, "; accepted draws=", object@sim$accepted, sep=""), "\n")
-            if (object@model_category=="aegypti") vars <- c("rho", "eta", "indexP", "Q", "V0")
-            else vars <- c("rho", "eta", "alpha", "indexP", "Q", "V0")
+            if (object@model_category=="aegypti") vars <- c("rho", "eta", "indexP")
+            else vars <- c("rho", "eta", "alpha", "indexP")
             draws <- object@sim[vars];
             all_gen_pars <- c("indexP", "Q", "V0")
             draws[all_gen_pars] <- lapply(draws[all_gen_pars], function(x) as.vector(as.matrix(x[, -1])))
@@ -102,7 +102,7 @@ setMethod("show", "mvsefit",
 #'
 #' @param x An object of class \code{\linkS4class{mvsefit}}.
 #' @param pars A character vector of parameter names. The default is all parameters
-#' (i.e. \code{"rho"}, \code{"eta"}, \code{"alpha"}, \code{"indexP"}, \code{"Q"}, \code{"V0"}).
+#' (i.e. \code{"rho"}, \code{"eta"}, \code{"alpha"}, \code{"indexP"}).
 #' @param probs A numeric vector of quantiles of interest. The default is
 #' \code{c(0.25, 0.5, 0.75)}.
 #' @param digits_summary The number of decimal places to use when printing the summary, defaulting to 3.
@@ -118,11 +118,11 @@ setMethod("print", "mvsefit",
             cat(paste("## iter=", x@mvse_args$iter, "; warmup=", x@mvse_args$warmup, sep=""), "\n")
             cat(paste("## post-warmup iter=", x@mvse_args$iter*x@mvse_args$warmup, "; accepted draws=", x@sim$accepted, sep=""), "\n")
             if (is.null(pars)) {
-              if (x@model_category=="aegypti") pars <- c("rho", "eta", "indexP", "Q", "V0")
-              else pars <- c("rho", "eta", "alpha", "indexP", "Q", "V0")
+              if (x@model_category=="aegypti") pars <- c("rho", "eta", "indexP")
+              else pars <- c("rho", "eta", "alpha", "indexP")
             }
             draws <- x@sim[pars];
-            all_gen_pars <- c("indexP", "Q", "V0")
+            all_gen_pars <- c("indexP")
             gen_pars <- all_gen_pars[which(all_gen_pars %in% pars)]
             if (length(gen_pars)>0) {
               draws[gen_pars] <- lapply(draws[gen_pars], function(x) as.vector(as.matrix(x[, -1])))
@@ -153,7 +153,7 @@ setMethod("print", "mvsefit",
 #'
 #' @param x An object of class \code{\linkS4class{mvsefit}}.
 #' @param pars A character vector of parameter names. The default is all parameters
-#' (i.e. \code{"rho"}, \code{"eta"}, \code{"alpha"}, \code{"indexP"}, \code{"Q"}, \code{"V0"}).
+#' (i.e. \code{"rho"}, \code{"eta"}, \code{"alpha"}, \code{"indexP"}).
 #'
 #' @return A named list, every element of which is either a numeric vector or dataframe representing samples
 #' for a parameter.
@@ -172,7 +172,7 @@ setMethod("print", "mvsefit",
 #' priors$human_inf_per <- list(dist="normal", pars=c(mean=5.9, sd=1)) # human-virus infectious period (days)
 #' user_model <- mvse_model(model_name="my_mvse_model", climate_data=climateFSA, priors=priors)
 #' 
-#' # run the MCMC sampling procedure to estimate the epi-entomological parameters as well Index P, Q and V0
+#' # run the MCMC sampling procedure to estimate the epi-entomological parameters as well Index P
 #' user_fit <- fitting(object=user_model, iter=10^5, warmup=0.2, seed=123, init=c(rho=1, eta=10, alpha=3), samples=1000)
 #' 
 #' # extract the sampled parameters
@@ -190,8 +190,8 @@ setGeneric("extract",
 setMethod("extract", "mvsefit",
           function(object, pars=NULL) {
             if (is.null(pars)) {
-              if (object@model_category=="aegypti") pars <- c("rho", "eta", "indexP", "Q", "V0")
-              else pars <- c("rho", "eta", "alpha", "indexP", "Q", "V0")
+              if (object@model_category=="aegypti") pars <- c("rho", "eta", "indexP")
+              else pars <- c("rho", "eta", "alpha", "indexP")
             }
             return(object@sim[pars])
           }
@@ -223,7 +223,7 @@ setMethod("extract", "mvsefit",
 #' priors$human_inf_per <- list(dist="normal", pars=c(mean=5.9, sd=1)) # human-virus infectious period (days)
 #' user_model <- mvse_model(model_name="my_mvse_model", climate_data=climateFSA, priors=priors)
 #' 
-#' # run the MCMC sampling procedure to estimate the epi-entomological parameters as well Index P, Q and V0
+#' # run the MCMC sampling procedure to estimate the epi-entomological parameters as well Index P
 #' user_fit <- fitting(object=user_model, iter=10^5, warmup=0.2, seed=123, init=c(rho=1, eta=10, alpha=3), samples=1000)
 #' 
 #' # plot the pairs plot for the MCMC draws of alpha, rho, eta
@@ -304,7 +304,7 @@ setMethod("mcmc_pairs", "mvsefit",
 #' # define a mvse model 
 #' aegypti_model <- mvse_model(model_name="my_aegypti_mvse_model", model_category="aegypti", climate_data=climateFSA)
 #' 
-#' # run the MCMC sampling procedure to estimate the epi-entomological parameters as well Index P, Q and V0
+#' # run the MCMC sampling procedure to estimate the epi-entomological parameters as well Index P. 
 #' aegypti_fit <- fitting(object=aegypti_model, iter=10^5, warmup=0.2, seed=123, init=c(rho=1, eta=10, alpha=3), samples=1000)
 #' 
 #' mcmc_traceplot(aegypti_fit, options=list(max_iter=10^5))
@@ -367,7 +367,7 @@ setMethod("mcmc_traceplot", "mvsefit",
 #' # define a mvse model 
 #' aegypti_model <- mvse_model(model_name="my_aegypti_mvse_model", model_category="aegypti", climate_data=climateFSA)
 #' 
-#' # run the MCMC sampling procedure to estimate the epi-entomological parameters as well Index P, Q and V0
+#' # run the MCMC sampling procedure to estimate the epi-entomological parameters as well Index P
 #' aegypti_fit <- fitting(object=aegypti_model, iter=10^5, warmup=0.2, seed=123, init=c(rho=1, eta=10, alpha=3), samples=1000)
 #' 
 #' # plot the posterior distributions of the factors
@@ -419,12 +419,10 @@ setMethod("mcmc_factor_dist", "mvsefit",
 ##########################################################################################################
 #' Plot a summary time series of a transmission potential index
 #'
-#' Plots a summary time series of one of the three transmission potential indices
-#' (i.e. index P, Q, V0). The mean time series along with the 95% credible interval are plotted.
+#' Plots a summary time series of one of Index P. The mean time series along with the 95% credible interval are plotted.
 #'
 #' @param x An object of S4 class \code{\linkS4class{mvsefit}}.
-#' @param index A character string specifying the index to plot. Options include \code{"indexP"},
-#' \code{Q} or \code{V0}. Defaults to \code{"indexP"}.
+#' @param index A character string specifying the index to plot. Defaults to \code{"indexP"}.
 #' @param filename The name of the file where the plot in PNG format is saved.
 #' @param options A named list of options for the plot.
 #'
@@ -437,7 +435,7 @@ setMethod("mcmc_factor_dist", "mvsefit",
 #' # define a mvse model 
 #' aegypti_model <- mvse_model(model_name="my_aegypti_mvse_model", model_category="aegypti", climate_data=climateFSA)
 #' 
-#' # run the MCMC sampling procedure to estimate the epi-entomological parameters as well Index P, Q and V0
+#' # run the MCMC sampling procedure to estimate the epi-entomological parameters as well Index P
 #' aegypti_fit <- fitting(object=aegypti_model, iter=10^5, warmup=0.2, seed=123, init=c(rho=1, eta=10, alpha=3), samples=1000)
 #' 
 #' # plot the distribution of sampled Index P
@@ -489,6 +487,7 @@ setMethod("mcmc_index_dist", "mvsefit",
                                  labels=c("mean", "95% CI")) +
               scale_alpha_manual(breaks=c("mean", "95CI"), values=c(1, 0.5), labels=NULL, guide="none") +
               scale_x_date(breaks=lab_dates, date_labels="%b %y") +
+              coord_cartesian(ylim=c(0, 10)) + 
               theme(legend.position = c(0.9, 0.9), legend.title=element_blank(),
                     legend.background = element_rect(color="black"))
             if (index=="indexP") p <- p + geom_hline(yintercept=1, color="black", alpha=0.5, linetype="dashed")

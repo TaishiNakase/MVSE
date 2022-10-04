@@ -80,33 +80,3 @@
   ef[which(ef<0)]<- 0 #fix negative numbers as bio -> trim to zero
   return(ef)
 }
-
-##CALCULATES MOSQ aquatic mortality rate COMPONENT DEPENDENT ON TEMP IN TIME
-.mvse_temp_effect_muA <- function(temp){
-  ef<- (2.13-0.3797*temp+0.02457*temp^2-0.0006778*temp^3+0.000006794*temp^4)
-  return(ef)
-}
-
-##CALCULATES MOSQ aquatic dev rate COMPONENT DEPENDENT ON TEMP IN TIME
-.mvse_temp_effect_epsA <- function(temp){
-  ef<-  0.131-0.05723*temp+0.01164*temp^2-0.001341*temp^3+0.00008723*temp^4-0.000003017*temp^5+5.153*10^(-8)*temp^6-3.42*10^(-10)*temp^7
-  return(ef)
-}
-
-##CALCULATES MOSQ oviposition rate COMPONENT DEPENDENT ON TEMP IN TIME
-.mvse_temp_effect_theta <- function(temp){
-  ef<-  -5.4+1.8*temp-0.2124*temp^2+0.01015*temp^3-0.0001515*temp^4
-  return(ef)
-}
-
-##CALCULATES MOSQ egg success rate COMPONENT DEPENDENT ON TEMP IN TIME
-.mvse_temp_effect_C<- function(temp){
-  ef<-  (-184.8+27.94*temp-0.9254*temp^2+0.009226*temp^3)/100
-  return(ef)
-}
-
-##CALCULATES MOSQ egg success rate effect COMPONENT DEPENDENT ON RAINFALL IN TIME
-.mvse_rain_effect_C <- function(R, meanR){
-  ef <- (R-meanR)/sqrt(1+(R-meanR)^2)
-  return(ef)
-}

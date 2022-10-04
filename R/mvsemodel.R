@@ -43,15 +43,14 @@ setClass("mvsemodel",
 #' Construct a MVSE model
 #'
 #' Construct an instance of S4 class \code{mvsemodel}. A \code{mvsemodel} object can be used to draw samples
-#' of the ecological factors (i.e. rho, eta, alpha) along with the transmission potential measures (i.e. index P,
-#' Q, V0) from the model.
+#' of the ecological factors (i.e. rho, eta, alpha) along with the transmission potential measures (i.e. index P) from the model.
 #'
 #' @param model_name A character string naming the model; defaults to \code{"anon_model"}.
 #' @param model_category A character string naming the model category. If \code{"aegypti"} is specified,
 #' the prior distributions of ecological/epidemiological human/vector parameters will automatically be set.
 #' Otherwise, it defaults to \code{user-defined} and the user must specify the prior distributions.
 #' @param climate_data A data frame for the climate data. The data frame should have four named columns; \code{date} for dates in the form
-#' \code{"\%Y-\%m-\%d"}, \code{T} for temperature in degrees Celcius, \code{H} for relative humidity and \code{R} for rainfall in mm.
+#' \code{"\%Y-\%m-\%d"}, \code{T} for temperature in degrees Celcius and \code{H} for relative humidity.
 #' @param priors A named list of lists specifying the priors for the host and vector entomological and epidemiological parameters
 #' (see \strong{Details} section for further information).
 #' @param warning An optional logical specifying whether warning messages should be displayed. 
@@ -246,7 +245,7 @@ setMethod("set_prior", "mvsemodel",
 #'
 #' An MCMC routine (Metropolis-Hastings algorithm) is run to draw samples of factors rho,
 #' eta and alpha from the model defined by class \code{mvsemodel}. The resulting posterior distributions
-#' of these factors are then used to draw samples of the time series of index P, Q and V0.
+#' of these factors are then used to draw samples of the time series of index P. 
 #'
 #' @param object An object of class \code{\linkS4class{mvsemodel}}.
 #' @param iter A positive integer specifying the number of MCMC steps to run the routine for.
@@ -263,7 +262,7 @@ setMethod("set_prior", "mvsemodel",
 #' @param smoothing An optional positive integer used for smoothing the climate data. For example,
 #' 7 will smooth the time series using +- 7 time points per existing point (up and down that point).
 #' @param samples A positive integer specifying the number of samples to draw from the estimated posterior distributions of rho, eta and alpha
-#' to estimate the time series of index P, Q and V0.
+#' to estimate the time series of index P.
 #' @param verbose \code{TRUE} or \code{FALSE}: flag indicating whether to print intermediate output from the MCMC routine
 #' to the console, which may be helpful for determining progress of algorithm. The default is \code{FALSE}.
 #'
@@ -283,7 +282,7 @@ setMethod("set_prior", "mvsemodel",
 #' priors$human_inf_per <- list(dist="normal", pars=c(mean=5.9, sd=1)) # human-virus infectious period (days)
 #' user_model <- mvse_model(model_name="my_mvse_model", climate_data=climateFSA, priors=priors)
 #' 
-#' # run the MCMC sampling procedure to estimate the epi-entomological parameters as well Index P, Q and V0
+#' # run the MCMC sampling procedure to estimate the epi-entomological parameters as well Index P
 #' user_fit <- fitting(object=user_model, iter=10^5, warmup=0.2, seed=123, init=c(rho=1, eta=10, alpha=3), samples=1000)
 #'
 #' @usage NULL
@@ -312,12 +311,9 @@ setMethod(f="fitting",
             if (!is.null(smoothing)) {
               mvse_data$H <- (.smoothUDSeries(mvse_data$H, smoothing))
               mvse_data$T <- (.smoothUDSeries(mvse_data$T, smoothing))
-              mvse_data$R <- (.smoothUDSeries(mvse_data$R, smoothing))
             }
             mvse_data$oH<- mvse_data$H
             mvse_data$H<-  (mvse_data$H-min(mvse_data$H, na.rm=TRUE))/(max(mvse_data$H, na.rm=TRUE)-min(mvse_data$H, na.rm=TRUE)) #normalize
-            mvse_data$oR<- mvse_data$R
-            mvse_data$R<-  mvse_data$R/max(mvse_data$R, na.rm=TRUE) #normalize
 
             # essential for P
             mvse_data$A<- .mvse_hum_effect_aV(mvse_data$H, mean(mvse_data$H))
@@ -326,13 +322,6 @@ setMethod(f="fitting",
             mvse_data$K<- .mvse_temp_epsVH(mvse_data$T)
             mvse_data$I <- .mvse_temp_epsHV(mvse_data$T)
             mvse_data$G<- .mvse_temp_effect_gammaV(mvse_data$T)
-
-            # essential for Q, V0
-            mvse_data$B<- .mvse_temp_effect_muA(mvse_data$T)
-            mvse_data$C<- .mvse_temp_effect_epsA(mvse_data$T)
-            mvse_data$D<- .mvse_temp_effect_theta(mvse_data$T)
-            mvse_data$E<- .mvse_temp_effect_C(mvse_data$T)
-            mvse_data$F<- .mvse_rain_effect_C(mvse_data$R,mean(mvse_data$R))
 
             # estimate rho, eta and alpha
             priors <- object@priors
@@ -345,7 +334,7 @@ setMethod(f="fitting",
             if (object@model_category=="aegypti") posterior_list <- mcmc_output[c("rho", "eta")]
             else posterior_list <- mcmc_output[c("rho", "eta", "alpha")]
 
-            # estimate time series for index P, Q and V0
+            # estimate time series for index P
             gen_quantities <- .sample_generated_quantities(posterior_list=posterior_list, mvse_data=mvse_data,
                                                            mvsemodel=object, n=samples, verbose=verbose)
 
@@ -366,7 +355,7 @@ setMethod(f="fitting",
 #'
 #' @param object An object of class \code{\linkS4class{mvsemodel}}.
 #' @param vars A vector of strings specifying the climatic variables to plot. Possible arguments include
-#' \code{"temperature"}, \code{"humidity"}, \code{"rainfall"} or any pair of the previous three strings.
+#' \code{"temperature"}, \code{"humidity"}, or the pair of the two strings.
 #' @param smoothing An optional positive integer used for smoothing the climate data. For example,
 #' 7 will smooth the time series using +- 7 time points per existing point (up and down that point).
 #' @param filename The name of the file where the plot in PNG format is saved (optional).
@@ -380,8 +369,8 @@ setMethod(f="fitting",
 #' 
 #' # plot climate data
 #' plot_climate(object=user_model) # temperature and humidity
-#' plot_climate(object=user_model, vars=c("temperature", "rainfall"))
-#' plot_climate(object=user_model, vars=c("temperature", "rainfall"), filename="climate_plot.png")
+#' plot_climate(object=user_model, vars=c("temperature"))
+#' plot_climate(object=user_model, vars=c("temperature"), filename="climate_plot.png")
 #'
 #' @usage NULL
 #'
@@ -424,12 +413,6 @@ setMethod(f="plot_climate",
                   scale_y_continuous(limits=c(0, 100), breaks=seq(0, 100, 20)) +
                   labs(y="Relative humidity")
               }
-              else {
-                p <- ggplot(data) +
-                  theme_bw() +
-                  geom_bar(aes(x=date, y=R), color='limegreen', stat="identity") +
-                  labs(y="Rainfall")
-              }
             }
 
             # plot for pairs of parameters
@@ -449,40 +432,6 @@ setMethod(f="plot_climate",
                   theme(legend.position="bottom", legend.title=element_blank(),
                         axis.title.y.left=element_text(color='magenta'),
                         axis.title.y.right=element_text(color='cadetblue4'))
-              }
-              else if (all(sort(vars)==c("humidity", "rainfall"))) {
-                max_R <- max(data$R)
-                data <- data %>%
-                  mutate(`H`=`H`*max_R*1.1/100) %>%
-                  gather(key=variable, value=value, c("H", "T", "R")) %>%
-                  filter(variable %in% c("H", "R"))
-                p <- ggplot(data) +
-                  theme_bw() +
-                  geom_line(data=data, aes(x=date, y=value, color=variable)) +
-                  scale_y_continuous(limits=c(0, max_R*1.1), name="Rainfall",
-                                     sec.axis = sec_axis(trans=~.*100/max_R, name="Humidity")) +
-                  scale_color_manual(breaks=c("H", "R"), values=c('limegreen', 'magenta'),
-                                     labels=c("Relative humidity", "Rainfall"), guide="none") +
-                  theme(legend.position="bottom", legend.title=element_blank(),
-                        axis.title.y.left=element_text(color='limegreen'),
-                        axis.title.y.right=element_text(color='magenta'))
-              }
-              else {
-                max_R <- max(data$R)
-                data <- data %>%
-                  mutate(`T`=`T`*max_R*1.1/100) %>%
-                  gather(key=variable, value=value, c("H", "T", "R")) %>%
-                  filter(variable %in% c("T", "R"))
-                p <- ggplot(data) +
-                  theme_bw() +
-                  geom_line(data=data, aes(x=date, y=value, color=variable)) +
-                  scale_y_continuous(limits=c(0, max_R*1.1), name="Rainfall",
-                                     sec.axis = sec_axis(trans=~.*100/max_R, name="Temperature")) +
-                  scale_color_manual(breaks=c("T", "R"), values=c('cadetblue4', 'limegreen'),
-                                     labels=c("Temperature", "Rainfall"), guide="none") +
-                  theme(legend.position="bottom", legend.title=element_blank(),
-                        axis.title.y.left=element_text(color='cadetblue4'),
-                        axis.title.y.right=element_text(color='limegreen'))
               }
             }
             p <- p +
@@ -611,12 +560,30 @@ setMethod(f="plot_priors",
                 p <- ggplot(data=density_df) +
                   theme_bw() +
                   geom_ribbon(aes(x=value, ymax=density, ymin=0, fill=temp), alpha=0.8) +
-                  geom_line(aes(x=value, y=density), color="black") +
+                  geom_line(aes(x=value, y=density, color=temp)) +
                   labs(title=labels[par], fill="Temperature", color="Temperature") +
                   scale_fill_manual(breaks=prior_pdf_list[[par]]$temps,
-                                     values=blue_colors) +
+                                    values=blue_colors, 
+                                    labels=c("    <15\u00B0C", 
+                                             "15-17.5\u00B0C", 
+                                             "17.5-20\u00B0C", 
+                                             "20-22.5\u00B0C",
+                                             "22.5-25\u00B0C", 
+                                             "25-27.5\u00B0C", 
+                                             "27.5-30\u00B0C", 
+                                             "30-32.5\u00B0C", 
+                                             "  >32.5\u00B0C")) +
                   scale_color_manual(breaks=prior_pdf_list[[par]]$temps,
-                                    values=blue_colors) +
+                                    values=blue_colors, 
+                                    labels=c("    <15\u00B0C", 
+                                             "15-17.5\u00B0C", 
+                                             "17.5-20\u00B0C", 
+                                             "20-22.5\u00B0C",
+                                             "22.5-25\u00B0C", 
+                                             "25-27.5\u00B0C", 
+                                             "27.5-30\u00B0C", 
+                                             "30-32.5\u00B0C", 
+                                             "  >32.5\u00B0C")) +
                   theme(plot.title=element_text(size=8), axis.title=element_blank(),
                         legend.position=c(0.6, 0.5), legend.key.size = unit(0.3, "cm"),
                         legend.title=element_blank())
@@ -711,13 +678,11 @@ setMethod(f="plot_priors",
                                                        dist=priors$mosq_inc_per$dists[[x]]$dist))
   }
 
-  if (verbose) print("Simulating empirical index P, Q and V0 given distributions of rho, eta and alpha...")
+  if (verbose) print("Simulating empirical index P given distributions of rho, eta and alpha...")
 
   num_steps <- nrow(mvse_data)
   rep_vals <- rep(NA, n*(num_steps))
   indexP <- matrix(rep_vals, ncol=(num_steps))
-  Q <- matrix(rep_vals, ncol=(num_steps))
-  V0 <- matrix(rep_vals, ncol=(num_steps))
   muV_samples <- list()
   aV_samples <- list()
   phiVH_samples <- list()
@@ -766,17 +731,6 @@ setMethod(f="plot_priors",
     indexP[ii,]<- (betaVH*betaHV*gammaV_t*gammaH)/(muV_t*(deltaH+muH)*(gammaH+muH)*(gammaV_t+muV_t)) #index P
     indexP[ii, which(indexP[ii,]<0)]<- 0
 
-    # calculate Q
-    f<- 0.5 ##TODO: this should perhaps not be hardcoded?
-    muA_t<- eta*mvse_data$B
-    EA_t<- pmax(0, mvse_data$C)
-    THETA_t<- pmax(0, mvse_data$D)
-    CS_t<- pmin(mvse_data$E*(1+mvse_data$F)^rho,1)
-    Q[ii,]<- pmax(0, EA_t/(EA_t+muA_t)*(f*THETA_t*CS_t)/muV_t)
-
-    # calculate V0
-    V0[ii,]<- pmax(0, (mvse_data$R+1)*(1-1/Q[ii,])*(EA_t/muV_t) )
-
     if (verbose) setTxtProgressBar(pb, ii)
   }
   if (verbose) close(pb)
@@ -798,8 +752,8 @@ setMethod(f="plot_priors",
       select(date, dplyr::everything())
     return(x)
   }
-  gen_quantities <- lapply(list(indexP, Q, V0), reformat)
-  names(gen_quantities) <- c("indexP", "Q", "V0")
+  gen_quantities <- lapply(list(indexP), reformat)
+  names(gen_quantities) <- c("indexP")
   gen_quantities <- c(gen_quantities, bio_samples)
   return(gen_quantities)
 }
@@ -815,7 +769,7 @@ setMethod(f="plot_priors",
   # human life expectancy
   human_life_exp <- list(dist="normal", pars=c("mean"=70, "sd"=3))
   # human infectious period
-  human_inf_period <- list(dist="normal", pars=c("mean"=4, "sd"=0.51))
+  human_inf_per <- list(dist="normal", pars=c("mean"=4, "sd"=0.51))
   # extrinsic incubation period
   mosq_inc_per <- list(temps=c(15, 17.5, 20, 22.5, 25, 27.5, 30, 32.5, 50),
                        dists=list(
@@ -830,7 +784,7 @@ setMethod(f="plot_priors",
                          `50`=list(dist="lognormal", pars=c("meanlog"=1.15, "sdlog"=0.15))
                        ))
   return(list(mosq_life_exp=mosq_life_exp, mosq_inc_per=mosq_inc_per, mosq_biting_freq=mosq_biting_freq,
-              human_life_exp=human_life_exp, human_inc_per=human_inc_per, human_inf_period=human_inf_period))
+              human_life_exp=human_life_exp, human_inc_per=human_inc_per, human_inf_per=human_inf_per))
 }
 
 ## samples the gammaV (rate from viremic blood meal to infectiousness)
