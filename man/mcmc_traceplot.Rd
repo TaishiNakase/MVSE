@@ -27,7 +27,7 @@ data(climateFSA)
 # define a mvse model 
 aegypti_model <- mvse_model(model_name="my_aegypti_mvse_model", model_category="aegypti", climate_data=climateFSA)
 
-# run the MCMC sampling procedure to estimate the epi-entomological parameters as well Index P, Q and V0
+# run the MCMC sampling procedure to estimate the epi-entomological parameters as well Index P. 
 aegypti_fit <- fitting(object=aegypti_model, iter=10^5, warmup=0.2, seed=123, init=c(rho=1, eta=10, alpha=3), samples=1000)
 
 mcmc_traceplot(aegypti_fit, options=list(max_iter=10^5))

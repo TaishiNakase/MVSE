@@ -16,7 +16,7 @@
 \item{object}{An object of class \code{\linkS4class{mvsemodel}}.}
 
 \item{vars}{A vector of strings specifying the climatic variables to plot. Possible arguments include
-\code{"temperature"}, \code{"humidity"}, \code{"rainfall"} or any pair of the previous three strings.}
+\code{"temperature"}, \code{"humidity"}, or the pair of the two strings.}
 
 \item{smoothing}{An optional positive integer used for smoothing the climate data. For example,
 7 will smooth the time series using +- 7 time points per existing point (up and down that point).}
@@ -37,8 +37,8 @@ user_model <- mvse_model(model_name="my_mvse_model", climate_data=climateFSA, pr
 
 # plot climate data
 plot_climate(object=user_model) # temperature and humidity
-plot_climate(object=user_model, vars=c("temperature", "rainfall"))
-plot_climate(object=user_model, vars=c("temperature", "rainfall"), filename="climate_plot.png")
+plot_climate(object=user_model, vars=c("temperature"))
+plot_climate(object=user_model, vars=c("temperature"), filename="climate_plot.png")
 
 }
 \seealso{

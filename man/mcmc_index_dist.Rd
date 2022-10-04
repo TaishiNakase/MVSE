@@ -13,8 +13,7 @@
 )
 }
 \arguments{
-\item{index}{A character string specifying the index to plot. Options include \code{"indexP"},
-\code{Q} or \code{V0}. Defaults to \code{"indexP"}.}
+\item{index}{A character string specifying the index to plot. Defaults to \code{"indexP"}.}
 
 \item{filename}{The name of the file where the plot in PNG format is saved.}
 
@@ -26,8 +25,7 @@
 A ggplot object is returned.
 }
 \description{
-Plots a summary time series of one of the three transmission potential indices
-(i.e. index P, Q, V0). The mean time series along with the 95% credible interval are plotted.
+Plots a summary time series of one of Index P. The mean time series along with the 95% credible interval are plotted.
 }
 \examples{
 # obtain climate data

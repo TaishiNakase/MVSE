@@ -20,7 +20,7 @@ the prior distributions of ecological/epidemiological human/vector parameters wi
 Otherwise, it defaults to \code{user-defined} and the user must specify the prior distributions.}
 
 \item{climate_data}{A data frame for the climate data. The data frame should have four named columns; \code{date} for dates in the form
-\code{"\%Y-\%m-\%d"}, \code{T} for temperature in degrees Celcius, \code{H} for relative humidity and \code{R} for rainfall in mm.}
+\code{"\%Y-\%m-\%d"}, \code{T} for temperature in degrees Celcius and \code{H} for relative humidity.}
 
 \item{priors}{A named list of lists specifying the priors for the host and vector entomological and epidemiological parameters
 (see \strong{Details} section for further information).}
@@ -32,8 +32,7 @@ An instance of S4 class \code{\linkS4class{mvsemodel}} that can be passed to \co
 }
 \description{
 Construct an instance of S4 class \code{mvsemodel}. A \code{mvsemodel} object can be used to draw samples
-of the ecological factors (i.e. rho, eta, alpha) along with the transmission potential measures (i.e. index P,
-Q, V0) from the model.
+of the ecological factors (i.e. rho, eta, alpha) along with the transmission potential measures (i.e. index P) from the model.
 }
 \details{
 The \code{priors} argument requires data in a specific format. The list must contain five lists \code{mosq_life_exp}, \code{mosq_inc_per},

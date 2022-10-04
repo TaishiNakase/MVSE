@@ -10,7 +10,7 @@
 \item{x}{An object of class \code{\linkS4class{mvsefit}}.}
 
 \item{pars}{A character vector of parameter names. The default is all parameters
-(i.e. \code{"rho"}, \code{"eta"}, \code{"alpha"}, \code{"indexP"}, \code{"Q"}, \code{"V0"}).}
+(i.e. \code{"rho"}, \code{"eta"}, \code{"alpha"}, \code{"indexP"}).}
 
 \item{probs}{A numeric vector of quantiles of interest. The default is
 \code{c(0.25, 0.5, 0.75)}.}

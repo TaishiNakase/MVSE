@@ -20,7 +20,7 @@ MVSE model as returned by the method \link{sampling}.
 \item{\code{mvse_args}}{A list containing the arguments used for sampling (e.g. \code{iter}, \code{warmup}, \code{init}, \code{gauJumps}, etc.).}
 
 \item{\code{sim}}{A list containing simulation results including the posterior draws for the factors (rho, eta, alpha) and the generated
-quantities (indexP, Q, V0) as well as various pieces of data used by many of the methods for \code{mvsefit} objects.}
+quantities (i.e. indexP) as well as various pieces of data used by many of the methods for \code{mvsefit} objects.}
 }}
 
 \section{Methods}{
