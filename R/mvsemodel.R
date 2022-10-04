@@ -109,7 +109,7 @@ setMethod("show", "mvsemodel",
             cat("Model name:", object@model_name, "\n")
             cat("Model category:", object@model_category, "\n")
             nrowShow <- min(10, nrow(object@climate_data))
-            trans_climate_data <- object@climate_data[, c("date", "T", "H", "R")]
+            trans_climate_data <- object@climate_data[, c("date", "T", "H")]
             cat("Climate data (limited to first 10 rows): \n")
             print(trans_climate_data[1:nrowShow, ], quote=FALSE)
             cat("Priors: \n")
@@ -148,7 +148,7 @@ setMethod("print", "mvsemodel",
             cat("Class:", class(x), "\n")
             cat("Model name:", x@model_name, "\n")
             cat("Model category:", x@model_category, "\n")
-            climate_data <- x@climate_data[, c("date", "T", "H", "R")]
+            climate_data <- x@climate_data[, c("date", "T", "H")]
             cat("Climate data: \n")
             print(climate_data, quote=FALSE)
             cat("Priors: \n")
@@ -420,7 +420,7 @@ setMethod(f="plot_climate",
               if (all(sort(vars)==c("humidity", "temperature"))) {
                 data <- data %>%
                   mutate(`T` = 2*`T`) %>%
-                  gather(key=variable, value=value, c("H", "T", "R")) %>%
+                  gather(key=variable, value=value, c("H", "T")) %>%
                   filter(variable %in% c("H", "T"))
                 p <- ggplot(data) +
                   theme_bw() +
