@@ -3,7 +3,7 @@
 
 MVSE, Mosquito-borne Viral Suitability Estimator, provides methods for
 the estimation of an index of climate-based transmission potential for
-mosquito-borne viruses. It can be parametrized for any combination of
+mosquito-borne viruses. It can be parameterized for any combination of
 host, virus and mosquito-species of interest with local climate data.
 
 ## Installation
@@ -14,33 +14,11 @@ GithHub repo where it is hosted.
 
 ``` r
 install.packages("devtools")
-#> Installing package into '/private/var/folders/j2/b7c7t8j976z3zxy0tgc4b9jw0000gn/T/RtmpQ1dDS6/temp_libpath95323c0f72ee'
-#> (as 'lib' is unspecified)
 install.packages("tidyverse")
-#> Installing package into '/private/var/folders/j2/b7c7t8j976z3zxy0tgc4b9jw0000gn/T/RtmpQ1dDS6/temp_libpath95323c0f72ee'
-#> (as 'lib' is unspecified)
 require(tidyverse)
-#> Loading required package: tidyverse
-#> ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──
-#> ✓ ggplot2 3.3.6     ✓ purrr   0.3.4
-#> ✓ tibble  3.1.6     ✓ dplyr   1.0.7
-#> ✓ tidyr   1.1.4     ✓ stringr 1.4.0
-#> ✓ readr   2.1.1     ✓ forcats 0.5.1
-#> ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-#> x dplyr::filter() masks stats::filter()
-#> x dplyr::lag()    masks stats::lag()
 require(devtools)
-#> Loading required package: devtools
-#> Loading required package: usethis
 
 install_github("TaishiNakase/MVSE")
-#> Downloading GitHub repo TaishiNakase/MVSE@HEAD
-#> Installing 23 packages: rlang, magrittr, vctrs, glue, fansi, crayon, cli, Rcpp, plyr, colorspace, RColorBrewer, withr, farver, scales, generics, matrixStats, pillar, tibble, checkmate, tidyselect, dplyr, tidyr, bayesplot
-#> Installing packages into '/private/var/folders/j2/b7c7t8j976z3zxy0tgc4b9jw0000gn/T/RtmpQ1dDS6/temp_libpath95323c0f72ee'
-#> (as 'lib' is unspecified)
-#> installing the source package 'farver'
-#> Installing package into '/private/var/folders/j2/b7c7t8j976z3zxy0tgc4b9jw0000gn/T/RtmpQ1dDS6/temp_libpath95323c0f72ee'
-#> (as 'lib' is unspecified)
 ```
 
 ## Example
@@ -52,11 +30,6 @@ First, we will install some packages.
 
 ``` r
 library(MVSE)
-#> 
-#> Attaching package: 'MVSE'
-#> The following object is masked from 'package:tidyr':
-#> 
-#>     extract
 ```
 
 We first need to create a `mvse_model` object, which requires time

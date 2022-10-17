@@ -14,13 +14,13 @@ library(knitr)
 
 # MVSE
 
-MVSE, Mosquito-borne Viral Suitability Estimator, provides methods for the estimation of an index of climate-based transmission potential for mosquito-borne viruses. It can be parametrized for any combination of host, virus and mosquito-species of interest with local climate data. 
+MVSE, Mosquito-borne Viral Suitability Estimator, provides methods for the estimation of an index of climate-based transmission potential for mosquito-borne viruses. It can be parameterized for any combination of host, virus and mosquito-species of interest with local climate data. 
 
 ## Installation
 
 The MVSE package is currently not hosted on CRAN (Comprehensive R Archive Network). We thus need to install the package directly from the GithHub repo where it is hosted. 
 
-```{r results='hide'}
+```{r results='hide', message=FALSE}
 install.packages("devtools")
 install.packages("tidyverse")
 require(tidyverse)
@@ -35,7 +35,7 @@ Let's go through a short example of how one might use MVSE to estimate Index P f
 
 First, we will install some packages. 
 
-```{r results='hide'}
+```{r message=FALSE}
 library(MVSE)
 ```
 
@@ -64,7 +64,7 @@ example_mvse_model
 Next, let's perform the MCMC (Markov chain Monte Carlo) sampling procedure to estimate Index P. 
 
 ```{r}
-example_mvse_fit <- fitting(example_mvse_model, verbose=FALSE)
+example_mvse_fit <- sampling(example_mvse_model, verbose=FALSE)
 ```
 
 Finally, let's take a look at the estimated distribution of the time series of Index P. 
