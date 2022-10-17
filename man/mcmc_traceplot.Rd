@@ -24,11 +24,13 @@ Displays a separate plot of iterations vs. sampled values for each of the factor
 # obtain climate data
 data(climateFSA)
 
-# define a mvse model 
-aegypti_model <- mvse_model(model_name="my_aegypti_mvse_model", model_category="aegypti", climate_data=climateFSA)
+# define a mvse model
+aegypti_model <- mvse_model(model_name="my_aegypti_mvse_model", 
+model_category="denv_aegypti", climate_data=climateFSA)
 
-# run the MCMC sampling procedure to estimate the epi-entomological parameters as well Index P. 
-aegypti_fit <- fitting(object=aegypti_model, iter=10^5, warmup=0.2, seed=123, init=c(rho=1, eta=10, alpha=3), samples=1000)
+# run the MCMC sampling procedure to estimate the epi-entomological parameters as well Index P.
+aegypti_fit <- sampling(object=aegypti_model, iter=10^5, warmup=0.2, seed=123, 
+init=c(rho=1, eta=10, alpha=3), samples=1000)
 
 mcmc_traceplot(aegypti_fit, options=list(max_iter=10^5))
 }

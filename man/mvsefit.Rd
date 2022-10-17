@@ -5,7 +5,7 @@
 \alias{mvsefit-class}
 \title{Class \code{mvsefit}: fitted MVSE model}
 \description{
-An object of class \code{mvsefit} contains the output derived from fitting a
+An object of class \code{mvsefit} contains the output derived from sampling of a
 MVSE model as returned by the method \link{sampling}.
 }
 \section{Slots}{
@@ -15,7 +15,7 @@ MVSE model as returned by the method \link{sampling}.
 
 \item{\code{model_category}}{The model category as a string.}
 
-\item{\code{mvsemodel}}{The instance of S4 class \link{mvsemodel}.}
+\item{\code{mvsemodel}}{The instance of S4 class \code{\linkS4class{mvsemodel}}.}
 
 \item{\code{mvse_args}}{A list containing the arguments used for sampling (e.g. \code{iter}, \code{warmup}, \code{init}, \code{gauJumps}, etc.).}
 
@@ -28,8 +28,8 @@ quantities (i.e. indexP) as well as various pieces of data used by many of the m
 \subsection{Printing, plotting and summarizing:}{
 \describe{\item{\code{show}}{Print the default summary for the model.}}}
 \subsection{Extracting posterior draws:}{
-\describe{\item{\code{show}}{Print the default summary for the model.}}}
+\describe{\item{\code{extract}}{Extact the sampled posterior distribution of the Index P as well as the ecological scaling parameters.}}}
 \subsection{Simulating:}{
-\describe{\item{\code{simulate}}{Simulate Index P, Q and V0 using the fitted model.}}}
+\describe{\item{\code{simulate}}{Simulate Index P using the fitted model.}}}
 }
 

@@ -27,8 +27,7 @@
 A ggplot object that can be further customized using the \bold{ggplot2} package.
 }
 \description{
-The default plot shows the time series for temperature and humidity. The method can also be used to
-plot other combinations of climatic variables (i.e. temperature, humidity and rainfall).
+The default plot shows the time series for temperature and humidity.
 }
 \examples{
 #define a mvse model
@@ -38,7 +37,6 @@ user_model <- mvse_model(model_name="my_mvse_model", climate_data=climateFSA, pr
 # plot climate data
 plot_climate(object=user_model) # temperature and humidity
 plot_climate(object=user_model, vars=c("temperature"))
-plot_climate(object=user_model, vars=c("temperature"), filename="climate_plot.png")
 
 }
 \seealso{

@@ -12,9 +12,10 @@ Imports:
     bayesplot,
     coda,
     dplyr,
-    pbapply,
     RColorBrewer,
-    tidyr
+    tidyr, 
+    methods, 
+    rlang
 Depends: 
     R (>= 2.10),
     ggplot2

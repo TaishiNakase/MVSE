@@ -3,48 +3,56 @@
 \name{set_prior}
 \alias{set_prior}
 \alias{set_prior,mvsemodel-method}
-\title{Set (or replace) the prior distribution of a human/vector ecological/epidemiological parameter.}
+\title{Set (or replace) the probability distribution of a human/vector/virus biological parameter.}
 \usage{
 \S4method{set_prior}{mvsemodel}(object, name, dist, pars)
 }
 \arguments{
 \item{object}{An object of class \code{\linkS4class{mvsemodel}}.}
 
-\item{name}{A character string specifying the parameter whose distribution is to be set (and replaced).
+\item{name}{A character string specifying the parameter whose distribution is to be set (or replaced).
 Valid strings include \code{"mosq_inc_per"}, \code{"mosq_life_exp"},
 \code{"mosq_biting_freq"}, \code{"human_life_exp"}, \code{"human_inc_per"} and
 \code{"human_inf_per"}.}
 
-\item{dist}{A character string specifying the distribution name. Currently only normal and lognormal distributions
+\item{dist}{A character string specifying the distribution name. Currently only normal and log-normal distributions
 are supported.}
 
 \item{pars}{A numeric vector specifying the parameters of the distribution. These must be consistent
 with the indicated distribution. \code{mean} and \code{sd} for the normal distribution and \code{meanlog} and \code{sdlog}
-for the lognormal distribution.}
+for the log-normal distribution.}
 }
 \value{
-An instance of S4 class \code{\linkS4class{mvsemodel}} with the prior distribution updated for
-the specified human/vector ecological/epidemiological parameters.
-#' # Daily temperature, relative humidity and precipitation data from 1981 in 2019 in the 
-# city of Feira de Santana in Bahia, Brazil.
+An instance of S4 class \code{\linkS4class{mvsemodel}} with the probability distribution updated for
+the specified human/vector/virus biological parameter.
 }
 \description{
-Set (or replace) the prior distribution of a human/vector ecological/epidemiological parameter.
+Set (or replace) the probability distribution of a human/vector/virus biological parameter.
+}
+\details{
+The following parameters can be modified: mosquito life expectancy in days (\code{mosq_life_exp}),
+mosquito incubation period in days (\code{mosq_inc_per}),
+mosquito biting frequency in bites/female/day (\code{mosq_biting_freq}), human life expectancy in years (\code{human_life_exp}),
+and human incubation period in days (\code{human_inc_per}) respectively. The in-build probability distributions for
+the `denv_aegypti` model category cannot be modified.
 }
 \examples{
 # obtain climate data
 data(climateFSA)
 
-# define mvse model without specifying priors 
+# define mvse model without specifying priors
 user_model <- mvse_model(model_name="my_mvse_model", climate_data=climateFSA, priors=list())
 
-# set priors of mvse model 
-# (e.g. Mosquito life expectancy to normal distribution with mean 12 days and standard deviation 2 days)
-set_prior(object=user_model, name="mosq_life_exp", dist="normal", pars=c(mean=12, sd=2))
+# set priors of mvse model
+# (e.g. Mosquito life expectancy to normal distribution with 
+# mean 12 days and standard deviation 2 days)
+user_model <- set_prior(object=user_model, name="mosq_life_exp", 
+dist="normal", pars=c(mean=12, sd=2))
 
-# replace previously set prior 
-# (e.g. Mosquito life expectancy to normal distribution with mean 15 days and standard deviation 4 days)
-set_prior(object=user_model, name="mosq_life_exp", dist="normal", pars=c(mean=15, sd=4))
+# replace previously set prior
+# (e.g. Mosquito life expectancy to normal distribution 
+# with mean 15 days and standard deviation 4 days)
+user_model <- set_prior(object=user_model, name="mosq_life_exp", 
+dist="normal", pars=c(mean=15, sd=4))
 
-# set 
 }

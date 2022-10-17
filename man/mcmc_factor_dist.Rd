@@ -8,15 +8,15 @@
 \S4method{mcmc_factor_dist}{mvsefit}(object, factors = NULL, filename = NULL)
 }
 \arguments{
+\item{object}{An object of S4 class \code{\linkS4class{mvsefit}}.}
+
 \item{factors}{If not NULL, a character vector indicating which factors (i.e. \code{"rho"},
-\code{"eta"} and \code{"alpha"}) to include in the plots. By default, all factors are included.}
+\code{"eta"} and \code{"alpha"}) to include in the plots. If NULL (default), all factors are included.}
 
-\item{filename}{The name of the file where the plot in PNG format is saved.}
-
-\item{x}{An object of S4 class \code{\linkS4class{mvsefit}}.}
+\item{filename}{The name of the file where the plot in PNG format is saved (optional).}
 }
 \value{
-Many ggplot objects organized into a grid via \code{\link{bayesplot_grid}} is returned.
+Several ggplot objects organized into a grid via \code{\link{bayesplot_grid}} is returned.
 }
 \description{
 Displays a separate plot (i.e. histogram) for the posterior distribution of each of the factors.
@@ -25,11 +25,13 @@ Displays a separate plot (i.e. histogram) for the posterior distribution of each
 # obtain climate data
 data(climateFSA)
 
-# define a mvse model 
-aegypti_model <- mvse_model(model_name="my_aegypti_mvse_model", model_category="aegypti", climate_data=climateFSA)
+# define a mvse model
+aegypti_model <- mvse_model(model_name="my_aegypti_mvse_model", 
+model_category="denv_aegypti", climate_data=climateFSA)
 
-# run the MCMC sampling procedure to estimate the epi-entomological parameters as well Index P, Q and V0
-aegypti_fit <- fitting(object=aegypti_model, iter=10^5, warmup=0.2, seed=123, init=c(rho=1, eta=10, alpha=3), samples=1000)
+# run the MCMC sampling procedure to estimate the epi-entomological parameters as well Index P
+aegypti_fit <- sampling(object=aegypti_model, iter=10^5, warmup=0.2, seed=123, 
+init=c(rho=1, eta=10, alpha=3), samples=1000)
 
 # plot the posterior distributions of the factors
 mcmc_factor_dist(aegypti_fit)

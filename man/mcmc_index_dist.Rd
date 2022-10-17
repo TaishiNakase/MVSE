@@ -13,29 +13,31 @@
 )
 }
 \arguments{
+\item{object}{An object of S4 class \code{\linkS4class{mvsefit}}.}
+
 \item{index}{A character string specifying the index to plot. Defaults to \code{"indexP"}.}
 
 \item{filename}{The name of the file where the plot in PNG format is saved.}
 
 \item{options}{A named list of options for the plot.}
-
-\item{x}{An object of S4 class \code{\linkS4class{mvsefit}}.}
 }
 \value{
 A ggplot object is returned.
 }
 \description{
-Plots a summary time series of one of Index P. The mean time series along with the 95% credible interval are plotted.
+Plots a summary time series of one of Index P. The mean time series along with the 95\% credible interval are plotted.
 }
 \examples{
 # obtain climate data
 data(climateFSA)
 
-# define a mvse model 
-aegypti_model <- mvse_model(model_name="my_aegypti_mvse_model", model_category="aegypti", climate_data=climateFSA)
+# define a mvse model
+aegypti_model <- mvse_model(model_name="my_aegypti_mvse_model", 
+model_category="denv_aegypti", climate_data=climateFSA)
 
-# run the MCMC sampling procedure to estimate the epi-entomological parameters as well Index P, Q and V0
-aegypti_fit <- fitting(object=aegypti_model, iter=10^5, warmup=0.2, seed=123, init=c(rho=1, eta=10, alpha=3), samples=1000)
+# run the MCMC sampling procedure to estimate the epi-entomological parameters as well Index P
+aegypti_fit <- sampling(object=aegypti_model, iter=10^5, warmup=0.2, seed=123, 
+init=c(rho=1, eta=10, alpha=3), samples=1000)
 
 # plot the distribution of sampled Index P
 mcmc_index_dist(aegypti_fit, index="indexP")

@@ -6,8 +6,8 @@
 \title{Class representing MVSE model}
 \description{
 A \code{mvsemodel} object contains both climate data and prior distributions
-for  human/vector ecological/epidemiological parameters. The \code{fitting}
-method defined in this class may be used to draw samples of the ecological factors
+for  human/vector/virus biological parameters. The \code{sampling}
+method defined in this class may be used to draw samples of the ecological scaling coefficients
 (rho, eta, alpha) from this model.
 }
 \details{
@@ -22,15 +22,13 @@ Instances of \code{mvsemodel} are created by calling the function \code{\link{mv
 
 \item{\code{climate_data}}{The climate data, an object of type \code{dataframe}.}
 
-\item{\code{priors}}{The prior distributions of the human/vector ecological/epidemiological parameters,
+\item{\code{priors}}{The prior distributions of the human/vector/virus biological parameters,
 an object of type \code{list}.}
 }}
 
 \section{Methods}{
 
-\describe{ \item{\code{show}}{Print the default summary for the model.} }
-
-
-\describe{ \item{\code{print}}{Print all information contained in the model.} }
+\describe{\item{\code{show}}{Print the default summary for the model.}}
+\describe{\item{\code{print}}{Print all information contained in the model.}}
 }
 

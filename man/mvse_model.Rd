@@ -15,30 +15,31 @@ mvse_model(
 \arguments{
 \item{model_name}{A character string naming the model; defaults to \code{"anon_model"}.}
 
-\item{model_category}{A character string naming the model category. If \code{"aegypti"} is specified,
-the prior distributions of ecological/epidemiological human/vector parameters will automatically be set.
-Otherwise, it defaults to \code{user-defined} and the user must specify the prior distributions.}
+\item{model_category}{A character string naming the model category. If \code{"denv_aegypti"} is specified,
+the informed probability distributions of human/vector/virus biological parameters will automatically be set.
+Otherwise, it defaults to \code{user-defined} and the user must specify the informed probability distributions for these parameters.}
 
 \item{climate_data}{A data frame for the climate data. The data frame should have four named columns; \code{date} for dates in the form
-\code{"\%Y-\%m-\%d"}, \code{T} for temperature in degrees Celcius and \code{H} for relative humidity.}
+\code{"\%Y-\%m-\%d"}, \code{T} for temperature in degrees Celsius and \code{H} for relative humidity (\%).}
 
-\item{priors}{A named list of lists specifying the priors for the host and vector entomological and epidemiological parameters
+\item{priors}{A named list of lists specifying the priors for the host/vector/virus biological parameters. 
 (see \strong{Details} section for further information).}
 
 \item{warning}{An optional logical specifying whether warning messages should be displayed.}
 }
 \value{
-An instance of S4 class \code{\linkS4class{mvsemodel}} that can be passed to \code{\link{fitting}}.
+An instance of S4 class \code{\linkS4class{mvsemodel}} that can be passed to \code{\link{sampling}}.
 }
 \description{
 Construct an instance of S4 class \code{mvsemodel}. A \code{mvsemodel} object can be used to draw samples
-of the ecological factors (i.e. rho, eta, alpha) along with the transmission potential measures (i.e. index P) from the model.
+of the ecological scaling coefficients (i.e. rho, eta, alpha) along with the transmission potential measure (i.e. index P) 
+from the defined model.
 }
 \details{
 The \code{priors} argument requires data in a specific format. The list must contain five lists \code{mosq_life_exp}, \code{mosq_inc_per},
 \code{mosq_biting_freq}, \code{human_life_exp} and \code{human_inc_per} which specify the distributions of mosquito life expectancy (days),
 mosquito incubation period (days), mosquito biting frequency (bites/female/day), human life expectancy (years), and
-human incubation period (days) respectively. The lists for each of the five distributions
+human incubation period (days) respectively. The list for each of the five distributions
 are specified by \code{pars}, a named numeric vector specifying the parameters of the distribution, and \code{dist}, a string for the name of the distribution.
 For example, a normally distributed mosquito incubation period with a mean of 5 days and a standard deviation 3 days can be
 specified as \code{mosq_inc_per=list(dist="normal", pars=c(mean=5, sd=3))}. Currently only the normal distribution with parameters \code{mean}
@@ -51,15 +52,23 @@ data(climateFSA)
 
 # User-defined model
 priors <- list()
-priors$mosq_life_exp <- list(dist="normal", pars=c(mean=12, sd=2)) # mosquito life expectancy (days)
-priors$mosq_inc_per <- list(dist="normal", pars=c(mean=7, sd=2))   # mosquito-virus incubation period (days)
-priors$mosq_biting_freq <- list(dist="normal", pars=c(mean=0.25, 0.01)) # mosquito biting frequency (bites/female/day)
-priors$human_life_exp <- list(dist="normal", pars=c(mean=71.1, sd=2)) # human life expectancy (years)
-priors$human_inc_per <- list(dist="normal", pars=c(mean=5.8, sd=1)) # human-virus incubation period (days)
-priors$human_inf_per <- list(dist="normal", pars=c(mean=5.9, sd=1)) # human-virus infectious period (days)
+### mosquito life expectancy (days)
+priors$mosq_life_exp <- list(dist="normal", pars=c(mean=12, sd=2))
+### mosquito-virus incubation period (days)
+priors$mosq_inc_per <- list(dist="normal", pars=c(mean=7, sd=2))
+### mosquito biting frequency (bites/female/day)
+priors$mosq_biting_freq <- list(dist="normal", pars=c(mean=0.25, sd=0.01))
+### human life expectancy (years)
+priors$human_life_exp <- list(dist="normal", pars=c(mean=71.1, sd=2))
+### human-virus incubation period (days)
+priors$human_inc_per <- list(dist="normal", pars=c(mean=5.8, sd=1))
+### human-virus infectious period (days)
+priors$human_inf_per <- list(dist="normal", pars=c(mean=5.9, sd=1))
 user_model <- mvse_model(model_name="my_mvse_model", climate_data=climateFSA, priors=priors)
 
-# Pre-defined model with priors for dengue virus transmission by Aedes aegypti mosquitoes in human hosts. 
-aegypti_model <- mvse_model(model_name="my_aegypti_mvse_model", model_category="aegypti", climate_data=climateFSA)
+# Pre-defined model with priors for dengue virus transmission 
+# by Aedes aegypti mosquitoes in human hosts. 
+aegypti_model <- mvse_model(model_name="my_aegypti_mvse_model", 
+model_category="denv_aegypti", climate_data=climateFSA)
 
 }

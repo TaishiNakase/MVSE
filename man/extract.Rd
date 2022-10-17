@@ -3,42 +3,50 @@
 \name{extract}
 \alias{extract}
 \alias{extract,mvsefit-method}
-\title{Extract samples from a fitted MVSE model}
+\title{Extract samples from a \code{\linkS4class{mvsefit}} object.}
 \usage{
 \S4method{extract}{mvsefit}(object, pars = NULL)
 }
 \arguments{
+\item{object}{An object of class \code{\linkS4class{mvsefit}}.}
+
 \item{pars}{A character vector of parameter names. The default is all parameters
 (i.e. \code{"rho"}, \code{"eta"}, \code{"alpha"}, \code{"indexP"}).}
-
-\item{x}{An object of class \code{\linkS4class{mvsefit}}.}
 }
 \value{
-A named list, every element of which is either a numeric vector or dataframe representing samples
-for a parameter.
+A named list, every element of which is either a numeric vector (\code{"rho"}, \code{"eta"}, \code{"alpha"}) or
+a dataframe (\code{"indexP"}) representing samples for a parameter.
 }
 \description{
-Extract samples from a fitted model represented by an instance of class \code{\linkS4class{mvsefit}}.
+Extract samples from a sampled mvse model represented by an instance of class \code{\linkS4class{mvsefit}}.
 }
 \examples{
 # obtain climate data
 data(climateFSA)
 
-# define a mvse model 
+# define a mvse model
 priors <- list()
-priors$mosq_life_exp <- list(dist="normal", pars=c(mean=12, sd=2)) # mosquito life expectancy (days)
-priors$mosq_inc_per <- list(dist="normal", pars=c(mean=7, sd=2))   # mosquito-virus incubation period (days)
-priors$mosq_biting_freq <- list(dist="normal", pars=c(mean=0.25, 0.01)) # mosquito biting frequency (bites/female/day)
-priors$human_life_exp <- list(dist="normal", pars=c(mean=71.1, sd=2)) # human life expectancy (years)
-priors$human_inc_per <- list(dist="normal", pars=c(mean=5.8, sd=1)) # human-virus incubation period (days)
-priors$human_inf_per <- list(dist="normal", pars=c(mean=5.9, sd=1)) # human-virus infectious period (days)
+### mosquito life expectancy (days)
+priors$mosq_life_exp <- list(dist="normal", pars=c(mean=12, sd=2))
+### mosquito-virus incubation period (days)
+priors$mosq_inc_per <- list(dist="normal", pars=c(mean=7, sd=2))
+### mosquito biting frequency (bites/female/day)
+priors$mosq_biting_freq <- list(dist="normal", pars=c(mean=0.25, sd=0.01))
+### human life expectancy (years)
+priors$human_life_exp <- list(dist="normal", pars=c(mean=71.1, sd=2))
+### human-virus incubation period (days)
+priors$human_inc_per <- list(dist="normal", pars=c(mean=5.8, sd=1))
+### human-virus infectious period (days)
+priors$human_inf_per <- list(dist="normal", pars=c(mean=5.9, sd=1))
 user_model <- mvse_model(model_name="my_mvse_model", climate_data=climateFSA, priors=priors)
 
-# run the MCMC sampling procedure to estimate the epi-entomological parameters as well Index P, Q and V0
-user_fit <- fitting(object=user_model, iter=10^5, warmup=0.2, seed=123, init=c(rho=1, eta=10, alpha=3), samples=1000)
+# run the MCMC sampling procedure to estimate the epi-entomological parameters as well Index P
+user_fit <- sampling(object=user_model, iter=10^5, warmup=0.2, seed=123, 
+init=c(rho=1, eta=10, alpha=3), samples=1000)
 
 # extract the sampled parameters
 all_output <- extract(user_fit) # all parameters
 indexP_output <- extract(user_fit, pars="indexP") # only Index P
+head(indexP_output$indexP[, 1:11])
 
 }

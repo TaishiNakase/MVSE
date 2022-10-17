@@ -3,7 +3,7 @@
 \name{plot_priors}
 \alias{plot_priors}
 \alias{plot_priors,mvsemodel-method}
-\title{Plot the prior distributions of the host/vector ecological/epidemiological parameters.}
+\title{Plot the informed probability distributions of the host/vector/virus biological parameters.}
 \usage{
 \S4method{plot_priors}{mvsemodel}(object, pars = NULL, filename = NULL)
 }
@@ -26,13 +26,19 @@ The default plot shows the probability density function for all parameters.
 #define a mvse model
 data(climateFSA)
 priors <- list()
-priors$mosq_life_exp <- list(dist="normal", pars=c(mean=12, sd=2)) # mosquito life expectancy (days)
-priors$mosq_inc_per <- list(dist="normal", pars=c(mean=7, sd=2))   # mosquito-virus incubation period (days)
-priors$mosq_biting_freq <- list(dist="normal", pars=c(mean=0.25, 0.01)) # mosquito biting frequency (bites/female/day)
-priors$human_life_exp <- list(dist="normal", pars=c(mean=71.1, sd=2)) # human life expectancy (years)
-priors$human_inc_per <- list(dist="normal", pars=c(mean=5.8, sd=1)) # human-virus incubation period (days)
-priors$human_inf_per <- list(dist="normal", pars=c(mean=5.9, sd=1)) # human-virus infectious period (days)
-user_model <- mvse_model(model_name="my_mvse_model", climate_data=climateFSA, priors=list())
+### mosquito life expectancy (days)
+priors$mosq_life_exp <- list(dist="normal", pars=c(mean=12, sd=2))
+### mosquito-virus incubation period (days)
+priors$mosq_inc_per <- list(dist="normal", pars=c(mean=7, sd=2))
+### mosquito biting frequency (bites/female/day)
+priors$mosq_biting_freq <- list(dist="normal", pars=c(mean=0.25, sd=0.01))
+### human life expectancy (years)
+priors$human_life_exp <- list(dist="normal", pars=c(mean=71.1, sd=2))
+### human-virus incubation period (days)
+priors$human_inc_per <- list(dist="normal", pars=c(mean=5.8, sd=1))
+### human-virus infectious period (days)
+priors$human_inf_per <- list(dist="normal", pars=c(mean=5.9, sd=1))
+user_model <- mvse_model(model_name="my_mvse_model", climate_data=climateFSA, priors=priors)
 
 # plot prior distributions of epi-entomological parameters
 plot_priors(object=user_model)
