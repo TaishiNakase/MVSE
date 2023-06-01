@@ -44,8 +44,7 @@
 
 #CALCULATES MOSQ DEATH RATE COMPONENT DEPENDENT ON TEMPERATURE IN TIME
 .mvse_temp_effect_muV <- function(temp){
-  ef <- (0.8692-0.1599*temp+(0.01116*(temp^2))-0.0003408*(temp^3)+0.000003809*(temp^4))
-  ef[which(1/ef>180 | ef < 0)]<- 1/180 # fix negative numbers and biologically impossible numbers to 1/180 (180 days)
+  ef <- (0.8692-0.1590*temp+(0.01116*(temp^2))-0.0003408*(temp^3)+0.000003809*(temp^4))
   return(ef)
 }
 
