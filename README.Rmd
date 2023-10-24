@@ -71,4 +71,5 @@ Finally, let's take a look at the estimated distribution of the time series of I
 
 ```{r}
 indexP_plot <- mcmc_index_dist(example_mvse_fit, index="indexP")
+indexP_plot
 ```
