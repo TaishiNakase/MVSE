@@ -60,17 +60,17 @@ example_mvse_model
 #> Model name: user_test 
 #> Model category: user-defined 
 #> Climate data (limited to first 10 rows): 
-#>          date        T        H            R
-#> 1  1981-01-02 25.13554 73.84253 0.0022509235
-#> 2  1981-02-02 25.01051 73.56940 0.0017562567
-#> 3  1981-03-02 25.44149 76.77259 0.0091257023
-#> 4  1981-04-02 23.51202 84.59996 0.0029805890
-#> 5  1981-05-02 22.42301 85.48878 0.0020460677
-#> 6  1981-06-02 21.85287 85.16210 0.0020688535
-#> 7  1981-07-02 20.71406 83.57096 0.0017366349
-#> 8  1981-08-02 20.99485 79.70238 0.0012274350
-#> 9  1981-09-02 22.46040 70.62206 0.0005982321
-#> 10 1981-10-02 25.42501 65.91237 0.0006568354
+#>          date     T     H
+#> 1  2015-01-01 27.54 65.25
+#> 2  2015-01-02 26.06 72.75
+#> 3  2015-01-03 25.58 71.00
+#> 4  2015-01-04 24.62 73.50
+#> 5  2015-01-05 26.26 75.75
+#> 6  2015-01-06 26.50 77.50
+#> 7  2015-01-07 25.38 81.75
+#> 8  2015-01-08 24.22 95.25
+#> 9  2015-01-09 24.50 85.25
+#> 10 2015-01-10 25.10 80.25
 #> Priors: 
 #>   Mosquito life expectancy (days)        : normal(mean=12, sd=2) 
 #>   Mosquito incubation period (days)      : normal(mean=7, sd=2) 
@@ -84,7 +84,7 @@ Next, let’s perform the MCMC (Markov chain Monte Carlo) sampling
 procedure to estimate Index P.
 
 ``` r
-example_mvse_fit <- fitting(example_mvse_model, verbose=FALSE)
+example_mvse_fit <- sampling(example_mvse_model, verbose=FALSE)
 ```
 
 Finally, let’s take a look at the estimated distribution of the time
@@ -92,4 +92,7 @@ series of Index P.
 
 ``` r
 indexP_plot <- mcmc_index_dist(example_mvse_fit, index="indexP")
+indexP_plot
 ```
+
+<img src="man/figures/README-unnamed-chunk-7-1.png" width="100%" />
